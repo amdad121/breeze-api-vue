@@ -61,7 +61,11 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.middleware.includes('guest') && auth.isLoggedIn)
     next({ name: 'dashboard' })
-  else if (to.meta.middleware.includes('verified') && auth.isLoggedIn)
+  else if (
+    to.meta.middleware.includes('verified') &&
+    auth.isLoggedIn &&
+    !auth.user.email_verified_at
+  )
     next({ name: 'verify-email' })
   else if (to.meta.middleware.includes('auth') && !auth.isLoggedIn)
     next({ name: 'login' })
