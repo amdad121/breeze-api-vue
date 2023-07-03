@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue'
+import { ref } from 'vue'
 import { RouterLink, useRoute } from 'vue-router'
 import ApplicationLogo from '../components/ApplicationLogo.vue'
 import Dropdown from '../components/Dropdown.vue'

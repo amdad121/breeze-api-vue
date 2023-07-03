@@ -8,43 +8,43 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      meta: { title: 'Home' },
+      meta: { title: 'Home', middleware: [] },
       component: Home,
     },
     {
       path: '/login',
       name: 'login',
-      meta: { title: 'Login', middleware: 'guest' },
+      meta: { title: 'Login', middleware: ['guest'] },
       component: () => import('../views/auth/Login.vue'),
     },
     {
       path: '/register',
       name: 'register',
-      meta: { title: 'Register', middleware: 'guest' },
+      meta: { title: 'Register', middleware: ['guest'] },
       component: () => import('../views/auth/Register.vue'),
     },
     {
       path: '/forgot-password',
       name: 'forgot-password',
-      meta: { title: 'Forgot Password', middleware: 'guest' },
+      meta: { title: 'Forgot Password', middleware: ['guest'] },
       component: () => import('../views/auth/ForgotPassword.vue'),
     },
     {
       path: '/dashboard',
       name: 'dashboard',
-      meta: { title: 'Dashboard', middleware: 'auth' },
+      meta: { title: 'Dashboard', middleware: ['auth', 'verified'] },
       component: () => import('../views/Dashboard.vue'),
     },
     {
       path: '/verify-email',
       name: 'verify-email',
-      meta: { title: 'Email Verify', middleware: 'auth' },
+      meta: { title: 'Email Verify', middleware: ['auth'] },
       component: () => import('../views/auth/VerifyEmail.vue'),
     },
     {
       path: '/password-reset/:token',
       name: 'password-reset',
-      meta: { title: 'Password Reset', middleware: 'auth' },
+      meta: { title: 'Password Reset', middleware: ['auth'] },
       component: () => import('../views/auth/PasswordReset.vue'),
     },
   ],
@@ -59,10 +59,12 @@ router.beforeEach(async (to, from, next) => {
     await auth.fetchUser()
   }
 
-  if (to.meta.middleware == 'guest' && auth.isLoggedIn)
+  if (to.meta.middleware.includes('guest') && auth.isLoggedIn)
     next({ name: 'dashboard' })
-  else if (to.meta.middleware == 'auth' && !auth.isLoggedIn)
-    next({ name: 'home' })
+  else if (to.meta.middleware.includes('verified') && auth.isLoggedIn)
+    next({ name: 'verify-email' })
+  else if (to.meta.middleware.includes('auth') && !auth.isLoggedIn)
+    next({ name: 'login' })
   else next()
 })
 
