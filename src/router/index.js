@@ -47,42 +47,22 @@ const router = createRouter({
       meta: { title: 'Password Reset', middleware: 'auth' },
       component: () => import('../views/auth/PasswordReset.vue'),
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (About.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/About.vue'),
-    // },
   ],
 })
 
-// router.beforeEach(async (to, from, next) => {
-//   document.title = to.meta.title + ' :: ' + import.meta.env.VITE_APP_NAME
+router.beforeEach(async (to, from, next) => {
+  document.title = to.meta.title + ' :: ' + import.meta.env.VITE_APP_NAME
 
-//   if (to.meta.middleware == 'guest') {
-//     next({ name: 'dashboard' })
-//   } else if (to.meta.middleware == 'auth') {
-//     next({ name: 'home' })
-//   } else {
-//     next()
-//   }
-// })
+  const auth = useAuthStore()
 
-router.beforeEach((to, from, next) => {
-  const { isLoggedIn } = useAuthStore()
+  if (!auth.isLoggedIn) {
+    await auth.fetchUser()
+  }
 
-  if (
-    to.matched.some((route) => route.meta.middleware === 'guest') &&
-    isLoggedIn
-  )
+  if (to.meta.middleware == 'guest' && auth.isLoggedIn)
     next({ name: 'dashboard' })
-  else if (
-    to.matched.some((route) => route.meta.middleware === 'auth') &&
-    !isLoggedIn
-  )
-    next({ name: 'login' })
+  else if (to.meta.middleware == 'auth' && !auth.isLoggedIn)
+    next({ name: 'home' })
   else next()
 })
 

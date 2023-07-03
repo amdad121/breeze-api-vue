@@ -7,7 +7,7 @@ import PrimaryButton from '../../components/PrimaryButton.vue'
 import TextInput from '../../components/TextInput.vue'
 import { useAuthStore } from '../../stores/auth'
 import { ref, watchEffect } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 
 const form = ref({
   email: '',

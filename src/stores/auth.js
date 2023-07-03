@@ -1,7 +1,7 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { useRouter } from 'vue-router'
-import axios from '../composables/axios'
+import axios from '../utils/axios'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
@@ -11,17 +11,17 @@ export const useAuthStore = defineStore('auth', () => {
 
   const fetchUser = async () => {
     try {
-      const { data } = await axios.get('api/user')
+      const { data } = await axios.get('/api/user')
 
       user.value = data
     } catch (error) {
-      if (error.response.status !== 409) throw error
-
-      router.push({ name: 'verify-email' })
+      if (error.response.status === 409) {
+        router.push({ name: 'verify-email' })
+      }
     }
   }
 
-  const csrf = () => axios.get('sanctum/csrf-cookie')
+  const csrf = () => axios.get('/sanctum/csrf-cookie')
 
   const login = async (processing, errors, { ...data }) => {
     processing.value = true
@@ -30,15 +30,15 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await csrf()
 
-      await axios.post('login', data)
+      await axios.post('/login', data)
 
       await fetchUser()
 
       router.push({ name: 'dashboard' })
     } catch (error) {
-      if (error.response.status !== 422) throw error
-
-      errors.value = error.response.data.errors
+      if (error.response.status === 422) {
+        errors.value = error.response.data.errors
+      }
     } finally {
       processing.value = false
     }
@@ -51,15 +51,15 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await csrf()
 
-      await axios.post('register', data)
+      await axios.post('/register', data)
 
       await fetchUser()
 
       router.push({ name: 'dashboard' })
     } catch (error) {
-      if (error.response.status !== 422) throw error
-
-      errors.value = error.response.data.errors
+      if (error.response.status === 422) {
+        errors.value = error.response.data.errors
+      }
     } finally {
       processing.value = false
     }
@@ -73,13 +73,13 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await csrf()
 
-      const { data } = await axios.post('forgot-password', { email })
+      const { data } = await axios.post('/forgot-password', { email })
 
       status.value = data.status
     } catch (error) {
-      if (error.response.status !== 422) throw error
-
-      errors.value = error.response.data.errors
+      if (error.response.status === 422) {
+        errors.value = error.response.data.errors
+      }
     } finally {
       processing.value = false
     }
@@ -93,16 +93,16 @@ export const useAuthStore = defineStore('auth', () => {
     try {
       await csrf()
 
-      const response = await axios.post('reset-password', data)
+      const response = await axios.post('/reset-password', data)
 
       router.push({
         name: 'login',
         query: { reset: btoa(response.data?.status) },
       })
     } catch (error) {
-      if (error.response.status !== 422) throw error
-
-      errors.value = error.response.data.errors
+      if (error.response.status === 422) {
+        errors.value = error.response.data.errors
+      }
     } finally {
       processing.value = false
     }
@@ -112,7 +112,7 @@ export const useAuthStore = defineStore('auth', () => {
     processing.value = true
     status.value = null
 
-    const { data } = await axios.post('email/verification-notification')
+    const { data } = await axios.post('/email/verification-notification')
 
     status.value = data.status
 
@@ -120,7 +120,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   const logout = async () => {
-    await axios.post('logout')
+    await axios.post('/logout')
 
     user.value = null
 

@@ -2,7 +2,7 @@
 import { version } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
-import axios from '../composables/axios'
+import axios from '../utils/axios'
 
 const { isLoggedIn } = useAuthStore()
 

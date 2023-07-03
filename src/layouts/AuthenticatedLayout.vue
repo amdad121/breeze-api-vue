@@ -11,13 +11,7 @@ import { useAuthStore } from '../stores/auth'
 
 const route = useRoute()
 
-const { user, isLoggedIn, fetchUser, logout } = useAuthStore()
-
-// onBeforeMount(async () => {
-//   if (!isLoggedIn) {
-//     await fetchUser()
-//   }
-// })
+const { user, logout } = useAuthStore()
 
 const showingNavigationDropdown = ref(false)
 </script>
