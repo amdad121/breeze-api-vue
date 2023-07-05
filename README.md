@@ -54,7 +54,7 @@ npm run dev
 
 ### Authentication Middleware
 
-This Nuxt application contains a custom `auth` middleware, designed to abstract all authentication logic away from your pages. In addition, the middleware can be used to access the currently authenticated user:
+This Vue application contains a custom `auth` middleware, designed to abstract all authentication logic away from your pages. In addition, the middleware can be used to access the currently authenticated user:
 
 ```js
 // First create a route inside router/index.js file
@@ -64,24 +64,33 @@ This Nuxt application contains a custom `auth` middleware, designed to abstract 
     meta: { title: 'Example Page', middleware: ['auth'] },
     component: () => import('../views/ExamplePage.vue'),
 },
+```
 
+```js
 // views/ExamplePage.vue
 <script lang="ts" setup>
-const { user, logout } = useAuthStore();
+import AuthenticatedLayout from '../layouts/AuthenticatedLayout.vue'
+import { useAuthStore } from '../stores/auth'
+
+const { user, logout } = useAuthStore()
 </script>
 
 <template>
-  <div>
-    <p>{{ user?.name }}</p>
+  <AuthenticatedLayout>
+    <div class="py-12">
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 flex gap-10">
+        <p>{{ user?.name }}</p>
 
-    <button @click="logout()">Sign out</button>
-  </div>
+        <button @click="logout()">Sign out</button>
+      </div>
+    </div>
+  </AuthenticatedLayout>
 </template>
 
 <style scoped></style>
 ```
 
-> Note: You will need to use [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`user?.name` instead of `user.name`) when accessing properties on the user object to account for Nuxt's initial server-side render.
+> Note: You will need to use [optional chaining](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining) (`user?.name` instead of `user.name`) when accessing properties on the user object to account for Vue's initial server-side render.
 
 ## Contributing
 
@@ -89,4 +98,4 @@ Contribution is open. Create Pull-request and I'll add it to the project if it's
 
 ## License
 
-Laravel API Breeze Vite + Vue 3 is open-sourced software licensed under the [MIT license](LICENSE.md).
+Laravel API Breeze Vite + Vue 3 is open-sourced software licensed under the [MIT license](LICENSE).
