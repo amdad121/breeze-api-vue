@@ -75,9 +75,7 @@ const handleLogin = async () => await login(processing, errors, form.value)
       <div class="block mt-4">
         <label class="flex items-center">
           <Checkbox name="remember" v-model:checked="form.remember" />
-          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400"
-            >Remember me</span
-          >
+          <span class="ml-2 text-sm text-gray-600 dark:text-gray-400">Remember me</span>
         </label>
       </div>
 
@@ -89,11 +87,7 @@ const handleLogin = async () => await login(processing, errors, form.value)
           Forgot your password?
         </RouterLink>
 
-        <PrimaryButton
-          class="ml-4"
-          :class="{ 'opacity-25': processing }"
-          :disabled="processing"
-        >
+        <PrimaryButton class="ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
           Log in
         </PrimaryButton>
       </div>

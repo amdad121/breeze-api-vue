@@ -28,8 +28,7 @@ const status = ref(null)
 
 const { resetPassword } = useAuthStore()
 
-const handleResetPassword = async () =>
-  await resetPassword(processing, errors, status, form.value)
+const handleResetPassword = async () => await resetPassword(processing, errors, status, form.value)
 </script>
 
 <template>
@@ -77,17 +76,11 @@ const handleResetPassword = async () =>
           autocomplete="new-password"
         />
 
-        <InputError
-          class="mt-2"
-          :message="errors?.password_confirmation?.[0]"
-        />
+        <InputError class="mt-2" :message="errors?.password_confirmation?.[0]" />
       </div>
 
       <div class="flex items-center justify-end mt-4">
-        <PrimaryButton
-          :class="{ 'opacity-25': processing }"
-          :disabled="processing"
-        >
+        <PrimaryButton :class="{ 'opacity-25': processing }" :disabled="processing">
           Reset Password
         </PrimaryButton>
       </div>

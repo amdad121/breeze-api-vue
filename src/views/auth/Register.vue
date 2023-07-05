@@ -19,8 +19,7 @@ const errors = ref({})
 
 const { register } = useAuthStore()
 
-const handleRegister = async () =>
-  await register(processing, errors, form.value)
+const handleRegister = async () => await register(processing, errors, form.value)
 </script>
 
 <template>
@@ -84,10 +83,7 @@ const handleRegister = async () =>
           autocomplete="new-password"
         />
 
-        <InputError
-          class="mt-2"
-          :message="errors?.password_confirmation?.[0]"
-        />
+        <InputError class="mt-2" :message="errors?.password_confirmation?.[0]" />
       </div>
 
       <div class="flex items-center justify-end mt-4">
@@ -98,11 +94,7 @@ const handleRegister = async () =>
           Already registered?
         </RouterLink>
 
-        <PrimaryButton
-          class="ml-4"
-          :class="{ 'opacity-25': processing }"
-          :disabled="processing"
-        >
+        <PrimaryButton class="ml-4" :class="{ 'opacity-25': processing }" :disabled="processing">
           Register
         </PrimaryButton>
       </div>
